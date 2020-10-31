@@ -17,8 +17,10 @@
 from pvstats.pvinverter.base import BasePVInverter
 
 from datetime import datetime
-from decimal import *
-import urllib2
+from decimal import Decimal
+# import urllib2
+from urllib.request import urlopen
+
 import json
 
 import logging
@@ -105,10 +107,10 @@ class PVInverter_Fronius(BasePVInverter):
 }
 """
 
-    response = urllib2.urlopen(self.url).read()
+    response = urlopen(self.url).read()
     data = json.loads(response)
     d = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '),default=str)
-    print d
+    print(d)
 
     self.registers = {'timestamp':     datetime.strptime(data['Head']['Timestamp'][:-6], "%Y-%m-%dT%H:%M:%S"),
                       'daily_pv_power':Decimal(data['Body']['Data']['DAY_ENERGY']['Value']),
@@ -118,7 +120,7 @@ class PVInverter_Fronius(BasePVInverter):
                       'pv1_voltage':   Decimal(data['Body']['Data']['UDC']['Value']),
                       'pv2_voltage':   Decimal('0')}
 
-    print self.registers
+    print(self.registers)
 
 
 #-----------------

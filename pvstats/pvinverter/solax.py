@@ -16,8 +16,9 @@
 
 from pvstats.pvinverter.base import BasePVInverter
 from datetime import datetime
-from decimal import *
-import urllib2
+from decimal import Decimal, getcontext
+# import urllib2
+from urllib.request import urlopen
 import json
 
 getcontext().prec = 9
@@ -40,7 +41,7 @@ class PVInverter_Solax(BasePVInverter):
   def read(self):
     """Reads the PV inverters status"""
 
-    response = urllib2.urlopen(self.url).read().decode("utf-8").replace(",,",",0,").replace(",,",",0,")
+    response = urlopen(self.url).read().decode("utf-8").replace(",,",",0,").replace(",,",",0,")
     data = json.loads(response)
     #print json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '),default=str)
 

@@ -17,7 +17,7 @@
 # limitations under the License.
 
 from datetime import datetime
-from decimal import *
+from decimal import Decimal
 
 from pymodbus.constants import Defaults
 from pymodbus.client.sync import ModbusTcpClient

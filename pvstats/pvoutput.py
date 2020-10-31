@@ -16,8 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import urllib
-import httplib
+from urllib.parse import urlencode 
+import http.client as httplib
 
 class PVOutputClient():
 	def __init__(self, host, api_key, system_id):
@@ -61,7 +61,7 @@ class PVOutputClient():
 		if response.status == 400:
 			raise ValueError(response.read())
 		if response.status != 200:
-			raise StandardError(response.read())
+			raise Exception(response.read())
 
 	def add_status(self, date, time, energy_generation=None, power_generation=None, energy_consumption=None, power_consumption=None, temperature=None, voltage=None, cumulative=False):
 		"""
@@ -86,14 +86,14 @@ class PVOutputClient():
 			params['v6'] = voltage
 		if cumulative:
 			params['c1'] = 1
-		params = urllib.urlencode(params)
+		params = urlencode(params)
 
 		response = self.make_request('POST', path, params)
 
 		if response.status == 400:
 			raise ValueError(response.read())
 		if response.status != 200:
-			raise StandardError(response.read())
+			raise Exception(response.read())
 
 	def get_status(self, date=None, time=None):
 		"""
@@ -105,14 +105,14 @@ class PVOutputClient():
 			params['d'] = date
 		if time:
 			params['t'] = time
-		params = urllib.urlencode(params)
+		params = urlencode(params)
 
 		response = self.make_request("GET", path, params)
 
 		if response.status == 400:
 			raise ValueError(response.read())
 		if response.status != 200:
-			raise StandardError(response.read())
+			raise Exception(response.read())
 
 		rsp = response.read().split(",")
 		return {'date':rsp[0],'time':rsp[1],'energy_generation':rsp[2],'power_generation':rsp[3],
@@ -128,14 +128,14 @@ class PVOutputClient():
 				'd': date,
 				't': time
 				}
-		params = urllib.urlencode(params)
+		params = urlencode(params)
 
 		response = self.make_request("POST", path, params)
 
 		if response.status == 400:
 			raise ValueError(response.read())
 		if response.status != 200:
-			raise StandardError(response.read())
+			raise Exception(response.read())
 
 		return response.read()
 

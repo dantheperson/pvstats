@@ -22,11 +22,12 @@ from pymodbus.client.sync import ModbusSerialClient
 from pymodbus.transaction import ModbusSocketFramer
 from pymodbus.exceptions import ModbusIOException
 from pymodbus.payload import BinaryPayloadDecoder
+from SungrowModbusTcpClient import SungrowModbusTcpClient
 from datetime import datetime
 
 import serial.rs485
 
-from decimal import *
+from decimal import Decimal, getcontext
 getcontext().prec = 9
 
 import logging
@@ -60,8 +61,8 @@ _register_map = {
 class PVInverter_SunGrow(BasePVInverter):
   def __init__(self, cfg, **kwargs):
     super(PVInverter_SunGrow, self).__init__()
-    self.client = ModbusTcpClient(cfg['host'],               port=cfg['port'],
-                                  framer=ModbusSocketFramer, timeout=3,
+    self.client = SungrowModbusTcpClient.SungrowModbusTcpClient(host=cfg['host'],               port=cfg['port'],
+                                  timeout=3,
                                   RetryOnEmpty=True,         retries=3)
 
   def connect(self):

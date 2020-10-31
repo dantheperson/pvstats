@@ -24,7 +24,7 @@ to install the package from the source archive.
 from distutils.core import setup
 from setuptools import find_packages
 
-print find_packages(exclude=['test'])
+print(find_packages(exclude=['test']))
 
 setup(name='pvstats',
       version='1.0',
@@ -32,9 +32,9 @@ setup(name='pvstats',
       long_description="""
         TODO
       """,
-      url='https://www.github.com/ptarcher/pvstats/',
-      author='Paul Archer',
-      author_email='ptarcher@gmail.com',
+      url='https://www.github.com/damianolombardo/pvstats/',
+      author='Damiano Lombardo',
+      author_email='lombardo.damiano@gmail.com',
       classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
@@ -53,7 +53,9 @@ setup(name='pvstats',
         'pymodbus',
         'influxdb',
         'paho-mqtt',
-        'pyserial >= 2.6'
+        'pyserial >= 2.6',
+        'pycrypto',
+        'SungrowModbusTcpClient'
       ],
       data_files=[
         ('/usr/bin',           ['bin/pvstats']),
