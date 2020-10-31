@@ -54,7 +54,7 @@ setup(name='pvstats',
         'influxdb',
         'paho-mqtt',
         'pyserial >= 2.6',
-        'pycrypto',
+        'pycryptodome',
         'SungrowModbusTcpClient'
       ],
       platforms=['Linux', 'Mac OS X', 'Win'],
