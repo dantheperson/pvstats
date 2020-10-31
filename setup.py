@@ -57,11 +57,5 @@ setup(name='pvstats',
         'pycrypto',
         'SungrowModbusTcpClient'
       ],
-      data_files=[
-        ('/usr/bin',           ['bin/pvstats']),
-        ('/etc',               ['pvstats.conf']),
-        ('/etc/systemd/system',['pvstats.service']),
-      ],
-
       platforms=['Linux', 'Mac OS X', 'Win'],
      )
