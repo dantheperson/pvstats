@@ -115,20 +115,20 @@ class PVReport_influxdb(BasePVOutput):
                                  cfg['user'], cfg['password'],
                                  cfg['db'],   ssl=cfg['ssl'],
                                  verify_ssl=cfg['verify_ssl'])
+    self.measurement = cfg['measurement']
+    self.tags = cfg['tags']
 
   def publish(self, data):
     # TODO
-    metrics = {'measurement': 'sungrow',
-               'tags':        {'location': 'Sydney'},
-               'fields':      data}
+    metrics = [{'measurement': self.measurement,
+               'tags': self.tags,
+               'fields': data}]
+    target = self.client.write_points(metrics)
+    if target:
+      _log.info("[INFO] Sent to InfluxDB")
+    else:
+      _log.error("[ERROR] Sent not to InfluxDB")
 
-    #fields  = {}
-    #metrics['measurement'] = "sungrow"
-    #metrics['tags']        = {'location': 'Sydney'}
-    #metrics['fields']      = {'test': 10}
-
-    #target = self.client.write_points([metrics])
-    _log.debug("[INFO] Sent to InfluxDB")
 
 class PVReport_test(BasePVOutput):
   def __init__(self, cfg):

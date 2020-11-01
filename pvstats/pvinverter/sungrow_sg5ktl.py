@@ -88,7 +88,7 @@ class PVInverter_SunGrow(BasePVInverter):
     self.registers['pv2_power'] = round(self.registers['pv2_current'] * self.registers['pv2_voltage'])
     self.registers['timestamp'] = datetime(self.registers['date_year'],   self.registers['date_month'],
                                            self.registers['date_day'],    self.registers['date_hour'],
-                                           self.registers['date_minute'], self.registers['date_second'])
+                                           self.registers['date_minute'], self.registers['date_second']).timestamp()
 
   def _load_registers(self,func,start,count=100):
     try:

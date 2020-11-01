@@ -37,8 +37,8 @@ def load_config(location):
     cfg = json.load(f)
 
   try:
-    if cfg['verbose'] > 0:
-      _log.setLevel(logging.DEBUG)
+    if cfg['log_level'] > 0:
+      _log.setLevel(cfg['log_level'])
   except:
     pass
 
