@@ -37,11 +37,10 @@ def load_config(location):
     cfg = json.load(f)
 
   try:
-    if cfg['log_level'] > 0:
+    if cfg.get('log_level') is not None:
       _log.setLevel(cfg['log_level'])
   except:
-    pass
-
+    _log.setLevel('INFO')
   return cfg
 
 def main():

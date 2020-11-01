@@ -21,8 +21,12 @@
       "password":"password",
       "db":"pvstats",
       "ssl":"1",
-      "verify_ssl":"0"
-    },
+      "verify_ssl":"0",
+      "measurement": "sungrow",
+      "tags": {
+        "location": "Perth"
+        }
+    }
     {
       "type":"mqtt",
       "host":"mqtt.example.com",
@@ -36,5 +40,5 @@
   ],
 
   "sample_period":10,
-  "verbose":1
+  "log_level":"INFO"
 }
