@@ -37,25 +37,14 @@ First modify `pvstats.conf` with your inverter settings, and also pvoutput.org, 
 ```
 /usr/bin/pvstats -f pvstats.conf
 ```
+## Docker
 
-## Running the tests
-
-Currently this is a TODO, if you would like to assit with adding tests to the project, please do.
-
-### ~~Break down into end to end tests~~
-
-Explain what these tests test and why
+To deploy a container:
+* Create a `pvstats.conf` based on `pvstats.conf.example`
+* Run the container with docker run
 
 ```
-Give an example
-```
-
-### ~~And coding style tests~~
-
-Explain what these tests test and why
-
-```
-Give an example
+docker run -v /path/to/config:/config damianolombardo/pvstats
 ```
 
 ## Deployment
@@ -82,18 +71,19 @@ sudo systemctl start pvstats.service
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/ptarcher/pvstats/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/damianolombardo/pvstats/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/ptarcher/pvstats).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/damianolombardo/pvstats).
 
 ## Authors of README.md
 
+* **Damiano Lombardo** - *Modified for pvstats* - [PVStats](https://github.com/damianolombardo/pvstats)
 * **Paul Archer** - *Modified for pvstats* - [PVStats](https://github.com/ptarcher/pvstats)
 * **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 
-See also the list of [contributors](https://github.com/ptarcher/pvstats/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/damianolombardo/pvstats/contributors) who participated in this project.
 
 ## License
 

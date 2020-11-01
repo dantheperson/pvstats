@@ -2,3 +2,4 @@ tags
 *.pyc
 pvstats.conf
 dist/
+.ipynb_checkpoints/
