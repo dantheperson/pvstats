@@ -93,7 +93,7 @@ def main():
   sleep_offset = cfg.get('sleep_offset')
   location = cfg.get('location')
   while True:
-    if sleep_offset && location:
+    if sleep_offset and location:
       inverter_sleep(location, sleep_offset)
     tstart = datetime.now()
     try:
