@@ -3,3 +3,4 @@ tags
 pvstats.conf
 dist/
 .ipynb_checkpoints/
+*.egg-info/

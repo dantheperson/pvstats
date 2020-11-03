@@ -16,7 +16,7 @@
 
 import time
 import json
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from sys import stdout
 import argparse
 
@@ -25,6 +25,10 @@ from pvstats.report import PVReportFactory
 
 import logging
 import traceback
+
+from astral import LocationInfo
+from astral.sun import sun
+from astral.geocoder import database, lookup
 
 # Setup the logging
 logging.basicConfig()
@@ -43,13 +47,32 @@ def load_config(location):
     _log.setLevel('INFO')
   return cfg
 
+# Determine the panel sleep time
+def inverter_sleep(location_name, offset):
+
+  location = lookup(location_name, database())
+  s = sun(location.observer, date=datetime.today(), tzinfo=location.timezone)
+  now = datetime.now(timezone.utc).astimezone()  
+  sunset = s["sunset"]
+  sunset_offset = sunset + timedelta(minutes=offset)
+
+  if sunset_offset <= now:
+    s_ = sun(location.observer, date=datetime.today() + timedelta(days=1), tzinfo=location.timezone)
+    sunrise_offset = s_['sunrise'] - timedelta(minutes=offset)
+    _log.info(f'Sleeping till {sunrise_offset.strftime("%c")}')  
+    time.sleep((sunrise_offset-now).seconds)
+
+  else:
+    return False
+
+
 def main():
   # Parse input arguments
   parser = argparse.ArgumentParser(
       description="Photovoltaic Inverter Statistics Scanner and Uploader",
       prog="pvstats",
       usage="%(prog)s [options]")
-  parser.add_argument("--cfg", help="Configuration File", nargs=1, default="/etc/pvstats.conf")
+  parser.add_argument("--cfg", help="Configuration File", nargs=1, default="./pvstats.conf")
   args = parser.parse_args()
 
   # Initialise
@@ -67,7 +90,11 @@ def main():
     if r != None:
       reports.append(r)
 
+  sleep_offset = cfg.get('sleep_offset')
+  location = cfg.get('location')
   while True:
+    if sleep_offset && location:
+      inverter_sleep(location, sleep_offset)
     tstart = datetime.now()
     try:
       # Grab the data from the inverter

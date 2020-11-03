@@ -55,7 +55,8 @@ setup(name='pvstats',
         'paho-mqtt',
         'pyserial >= 2.6',
         'pycryptodome',
-        'SungrowModbusTcpClient'
+        'SungrowModbusTcpClient',
+        'Astral'
       ],
       platforms=['Linux', 'Mac OS X', 'Win'],
      )

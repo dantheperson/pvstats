@@ -1,0 +1,7 @@
+pymodbus
+influxdb
+paho-mqtt
+pyserial >= 2.6
+pycryptodome
+SungrowModbusTcpClient
+Astral
