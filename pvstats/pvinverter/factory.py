@@ -35,7 +35,7 @@ class PVInverter_Test(BasePVInverter):
   def __init__(self): pass
   def connect(self): pass
   def read(self):
-    self.registers = {'timestamp':datetime.now(),
+    self.registers = {'timestamp':datetime.now().timestamp(),
                       'daily_pv_power':Decimal('2300') + randint(0,1000),
                       'total_pv_power':Decimal('2100') + randint(0,1000),
                       'internal_temp': Decimal('41.2') + randint(0,10),
