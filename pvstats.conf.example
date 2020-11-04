@@ -40,5 +40,7 @@
   ],
 
   "sample_period":10,
-  "log_level":"INFO"
+  "log_level":"INFO",
+  "night_offset": 10,
+  "location": "Perth"
 }
