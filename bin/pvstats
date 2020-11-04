@@ -27,7 +27,7 @@ import logging
 import traceback
 
 from astral import LocationInfo
-from astral.sun import sun
+from astral.sun import sun, daylight
 from astral.geocoder import database, lookup
 
 # Setup the logging
@@ -51,18 +51,34 @@ def load_config(location):
 def inverter_sleep(location_name, offset):
 
   location = lookup(location_name, database())
-  s = sun(location.observer, date=datetime.today(), tzinfo=location.timezone)
-  now = datetime.now(timezone.utc).astimezone()  
-  sunset = s["sunset"]
+  now = datetime.now(location.tzinfo)
+  s = sun(location.observer, date=now, tzinfo=location.timezone)    
+    
+  if now < s['noon']:
+    _log.info('before noon')
+    midday_offset = 0
+  else:
+    _log.info('after noon')
+    midday_offset = 1    
+  
+  d = daylight(location.observer, date=now, tzinfo=location.timezone)  
+  surise = d[0]
+  sunrise_offset = surise - timedelta(minutes=offset)
+  sunset = d[1]
   sunset_offset = sunset + timedelta(minutes=offset)
 
-  if sunset_offset <= now:
-    s_ = sun(location.observer, date=datetime.today() + timedelta(days=1), tzinfo=location.timezone)
-    sunrise_offset = s_['sunrise'] - timedelta(minutes=offset)
-    _log.info(f'Sleeping till {sunrise_offset.strftime("%c")}')  
-    time.sleep((sunrise_offset-now).seconds)
+  dT = daylight(location.observer, date=now+timedelta(days=midday_offset), tzinfo=location.timezone)
+  suriseT = dT[0]
+  sunriseT_offset = suriseT - timedelta(minutes=offset)
 
+  if not sunrise_offset <= now <= sunset_offset:
+    
+    _log.info(f'Sleeping till {sunriseT_offset.strftime("%c %z")}')  
+    time.sleep((sunriseT_offset-now).seconds)
+    return True
+  
   else:
+    _log.debug(f'Awake till {sunset_offset.strftime("%c %z")}')  
     return False
 
 
