@@ -88,9 +88,11 @@ def main():
       description="Photovoltaic Inverter Statistics Scanner and Uploader",
       prog="pvstats",
       usage="%(prog)s [options]")
-  parser.add_argument("--cfg", help="Configuration File", nargs=1, default="./pvstats.conf")
-  args = parser.parse_args()
+  parser.add_argument("--cfg", help="Configuration File", nargs=1, default=["./pvstats.conf"])
 
+  args, unknown = parser.parse_known_args()
+  if unknown:
+    _log.error(f'unknown arguments passed; {unknown}')
   # Initialise
   cfg = load_config(vars(args)['cfg'][0])
 
