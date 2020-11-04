@@ -55,10 +55,10 @@ def inverter_sleep(location_name, offset):
   s = sun(location.observer, date=now, tzinfo=location.timezone)    
     
   if now < s['noon']:
-    _log.info('before noon')
+    _log.debug('before noon')
     midday_offset = 0
   else:
-    _log.info('after noon')
+    _log.debug('after noon')
     midday_offset = 1    
   
   d = daylight(location.observer, date=now, tzinfo=location.timezone)  
