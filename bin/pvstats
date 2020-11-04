@@ -108,11 +108,11 @@ def main():
     if r != None:
       reports.append(r)
 
-  sleep_offset = cfg.get('sleep_offset')
+  night_offset = cfg.get('night_offset')
   location = cfg.get('location')
   while True:
-    if sleep_offset and location:
-      inverter_sleep(location, sleep_offset)
+    if night_offset and location:
+      inverter_sleep(location, night_offset)
     tstart = datetime.now()
     try:
       # Grab the data from the inverter
