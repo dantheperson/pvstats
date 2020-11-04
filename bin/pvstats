@@ -31,7 +31,7 @@ from astral.sun import sun, daylight
 from astral.geocoder import database, lookup
 
 # Setup the logging
-logging.basicConfig()
+logging.basicConfig(format="%(asctime)s: %(levelname)s %(message)s")
 _log = logging.getLogger()
 
 
