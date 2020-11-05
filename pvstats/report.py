@@ -138,7 +138,7 @@ class PVReport_test(BasePVOutput):
     pass
 
   def publish(self, data):
-    _log.debug(json.dumps(data, sort_keys=True,
+    _log.info(json.dumps(data, sort_keys=True,
                          indent=4, separators=(',', ': '),default=str))
 
 
