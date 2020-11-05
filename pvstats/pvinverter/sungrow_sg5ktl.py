@@ -114,7 +114,10 @@ class PVInverter_SunGrow(BasePVInverter):
     self.client = SungrowModbusTcpClient.SungrowModbusTcpClient(host=cfg['host'],               port=cfg['port'],
                                   timeout=3,
                                   RetryOnEmpty=True,         retries=3)
-
+    if cfg.get('register_map') is None:
+      self._register_map = _register_map
+    else:
+      self._register_map = cfg.get('register')
   def connect(self):
     self.client.connect()
 
@@ -125,9 +128,9 @@ class PVInverter_SunGrow(BasePVInverter):
     """Reads the PV inverters status"""
 
     # Read holding and input registers in groups aligned on the 100
-    for func in _register_map:
+    for func in self._register_map:
       start = -1
-      for k in sorted(_register_map[func].keys()):
+      for k in sorted(self._register_map[func].keys()):
         group  = int(k) - int(k) % 100
         if (start < group):
           self._load_registers(func, group, 100)
@@ -160,8 +163,8 @@ class PVInverter_SunGrow(BasePVInverter):
         key  = str(start + x + 1)
         val  = rq.registers[x]
 
-        if key in _register_map[func]:
-          reg = _register_map[func][key]
+        if key in self._register_map[func]:
+          reg = self._register_map[func][key]
           self.registers[reg['name']] = val * reg['scale']
 
 
