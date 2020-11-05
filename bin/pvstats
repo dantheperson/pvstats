@@ -49,8 +49,11 @@ def load_config(location):
 
 # Determine the panel sleep time
 def inverter_sleep(location_name, offset):
-
-  location = lookup(location_name, database())
+  try:
+    location = lookup(location_name, database())
+  except KeyError as e:
+    _log.warning(f'Location Error {e}')
+    return False
   now = datetime.now(location.tzinfo)
   s = sun(location.observer, date=now, tzinfo=location.timezone)    
     
@@ -111,7 +114,7 @@ def main():
   night_offset = cfg.get('night_offset')
   location = cfg.get('location')
   while True:
-    if night_offset and location:
+    if night_offset is not None and location is not None:
       inverter_sleep(location, night_offset)
     tstart = datetime.now()
     try:
