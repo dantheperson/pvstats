@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3-alpine
 LABEL maintainer="damiano lombardo <lombardo.damiano@gmail.com"
 
 VOLUME /config
