@@ -120,7 +120,7 @@ class PVReport_influxdb(BasePVOutput):
 
   def publish(self, data):
     # TODO
-    fields = {k:v for (k,v) in data.items() if not k.startswith("date_")}
+    fields = {k:v for (k,v) in data.items() if not k.startswith("date_") and k != "timestamp"}
     tags = {k:v for (k,v) in data.items() if k.startswith("date_")}
     tags.update(self.tags)
     metrics = [{'measurement': self.measurement,
@@ -128,9 +128,9 @@ class PVReport_influxdb(BasePVOutput):
                'fields': fields}]
     target = self.client.write_points(metrics)
     if target:
-      _log.info("[INFO] Sent to InfluxDB")
+      _log.info("Sent to InfluxDB")
     else:
-      _log.error("[ERROR] Sent not to InfluxDB")
+      _log.error("Not sent to InfluxDB")
 
 
 class PVReport_test(BasePVOutput):
