@@ -5,6 +5,8 @@ VOLUME /config
 
 COPY . /pvstats
 
-RUN pip install ./pvstats
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
+    && pip install ./pvstats \
+    && apk del .build-deps gcc musl-dev
 
 CMD ["/pvstats/bin/pvstats", "--cfg", "/config/pvstats.conf"]
