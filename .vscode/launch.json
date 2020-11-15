@@ -8,9 +8,12 @@
             "name": "Python: ./bin/pvstats",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}\\bin\\pvstats --cfg ${workspaceFolder}\\pvstats.config",
+            "program": "${workspaceFolder}\\bin\\pvstats",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder};${env:PYTHONPATH}"
+            }
         }
     ]
 }
