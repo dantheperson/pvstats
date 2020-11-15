@@ -26,7 +26,7 @@ import json
 import paho.mqtt.client as mqtt
 
 import logging
-logging.basicConfig()
+logging.basicConfig(format="%(asctime)s: %(levelname)s %(message)s")
 _log = logging.getLogger()
 
 class BasePVOutput():
