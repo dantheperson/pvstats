@@ -115,7 +115,8 @@ def main():
   location = cfg.get('location')
   while True:
     if night_offset is not None and location is not None:
-      inverter_sleep(location, night_offset)
+      if inverter_sleep(location, night_offset):
+        return None
     tstart = datetime.now()
     try:
       # Grab the data from the inverter
@@ -142,6 +143,7 @@ def main():
 
 
 if __name__ == "__main__":
-  main()
+  while True:
+    main()
 
 # vim: set expandtab ts=2 sw=2:
