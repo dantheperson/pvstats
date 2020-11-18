@@ -1,0 +1,6 @@
+{
+    "python.pythonPath": "C:\\Users\\absol\\.conda\\envs\\pvstats\\python.exe",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.formatting.provider": "yapf",
+}

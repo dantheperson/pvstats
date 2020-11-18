@@ -179,9 +179,9 @@ class PVInverter_SunGrow(BasePVInverter):
           reg = self._register_map[func][key]
           reg_name = reg['name']
           reg_scale = reg['scale']
-          if reg['type'] == 'int16' and self.registers[reg_name] >= 2**15:
+          if reg['type'] == 'int16' and val >= 2**15:
             self.registers[reg_name] = (val - 2**16) * reg_scale
-          elif reg['type'] == 'int32' and self.registers[reg_name] >= 2**15:
+          elif reg['type'] == 'int32' and val >= 2**15:
             self.registers[reg_name] = (val - 2**16) * reg_scale
           else:
             self.registers[reg_name] = val * reg_scale
