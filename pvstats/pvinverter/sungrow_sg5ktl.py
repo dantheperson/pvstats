@@ -42,18 +42,18 @@ _register_map = {
     '5002':  {'name': 'output_type',                             'scale': Decimal(1),         'units': '',       'type': 'uint16'},
     '5003':  {'name': 'daily_pv_energy',                         'scale': Decimal(100),       'units': 'Wh',     'type': 'uint16'},
     '5004':  {'name': 'lifetime_pv_energy',                      'scale': Decimal(1000),      'units': 'Wh',     'type': 'uint32'},
-    # '5005':  {'name': 'lifetime_pv_energy_2',                    'scale': Decimal(1000),      'units': 'Wh',     'type': 'uint32'},
+    '5005':  {'name': 'lifetime_pv_energy_2',                    'scale': Decimal(1000),      'units': 'Wh',     'type': 'uint32'},
     '5006':  {'name': 'lifetime_runtime',                        'scale': Decimal(1),         'units': 'h',      'type': 'uint32'},
-    # '5007':  {'name': 'lifetime_runtime_2',                      'scale': Decimal(1),         'units': 'h',      'type': 'uint32'},
+    '5007':  {'name': 'lifetime_runtime_2',                      'scale': Decimal(1),         'units': 'h',      'type': 'uint32'},
     '5008':  {'name': 'internal_temp',                           'scale': Decimal('0.1'),     'units': 'C',      'type': 'int16'},
     '5009':  {'name': 'apparent_power',                          'scale': Decimal(1),         'units': 'VA',     'type': 'uint32'},
-    # '5010':  {'name': 'apparent_power_2',                        'scale': Decimal(1),         'units': 'VA',     'type': 'uint32'},
+    '5010':  {'name': 'apparent_power_2',                        'scale': Decimal(1),         'units': 'VA',     'type': 'uint32'},
     '5011':  {'name': 'pv1_voltage',                             'scale': Decimal('0.1'),     'units': 'V',      'type': 'uint16'},
     '5012':  {'name': 'pv1_current',                             'scale': Decimal('0.1'),     'units': 'A',      'type': 'uint16'},
     '5013':  {'name': 'pv2_voltage',                             'scale': Decimal('0.1'),     'units': 'V',      'type': 'uint16'},
     '5014':  {'name': 'pv2_current',                             'scale': Decimal('0.1'),     'units': 'A',      'type': 'uint16'},
     '5017':  {'name': 'total_pv_power',                          'scale': Decimal(1),         'units': 'W',      'type': 'uint32'},
-    # '5018':  {'name': 'total_pv_power_2',                        'scale': Decimal(1),         'units': 'W',      'type': 'uint32'},
+    '5018':  {'name': 'total_pv_power_2',                        'scale': Decimal(1),         'units': 'W',      'type': 'uint32'},
     '5019':  {'name': 'grid_voltage_A',                          'scale': Decimal('0.1'),     'units': 'V',      'type': 'uint16'},
     '5020':  {'name': 'grid_voltage_B',                          'scale': Decimal('0.1'),     'units': 'V',      'type': 'uint16'},
     '5021':  {'name': 'grid_voltage_C',                          'scale': Decimal('0.1'),     'units': 'V',      'type': 'uint16'},
@@ -61,9 +61,9 @@ _register_map = {
     '5023':  {'name': 'inverter_current_B',                      'scale': Decimal('0.1'),     'units': 'A',      'type': 'uint16'},
     '5024':  {'name': 'inverter_current_C',                      'scale': Decimal('0.1'),     'units': 'A',      'type': 'uint16'},
     '5031':  {'name': 'active_power',                            'scale': Decimal(1),         'units': 'W',      'type': 'uint32'},
-    # '5032':  {'name': 'active_power_2',                          'scale': Decimal(1),         'units': 'W',      'type': 'uint32'},
+    '5032':  {'name': 'active_power_2',                          'scale': Decimal(1),         'units': 'W',      'type': 'uint32'},
     '5033':  {'name': 'reactive_power',                          'scale': Decimal(1),         'units': 'VAR',    'type': 'int32'},
-    # '5034':  {'name': 'reactive_power_2',                        'scale': Decimal(1),         'units': 'VAR',    'type': 'int32'},
+    '5034':  {'name': 'reactive_power_2',                        'scale': Decimal(1),         'units': 'VAR',    'type': 'int32'},
     '5035':  {'name': 'power_factor',                            'scale': Decimal('0.001'),   'units': '',       'type': 'int16'},
     '5036':  {'name': 'grid_frequency',                          'scale': Decimal('0.1'),     'units': 'Hz',     'type': 'uint16'},
     '5038':  {'name': 'work_state',                              'scale': Decimal(1),         'units': '',       'type': 'uint16'},
@@ -76,39 +76,39 @@ _register_map = {
     '5045':  {'name': 'fault_code',                              'scale': Decimal(1),         'units': '',       'type': 'uint16'},
     '5049':  {'name': 'nominal_reactive_power',                  'scale': Decimal(100),       'units': 'VA',     'type': 'uint16'},
     '5071':  {'name': 'ground_impedance',                        'scale': Decimal(1000),      'units': 'Ohm',    'type': 'uint16'},
-    '5081':  {'name': 'work_state_2',                            'scale': Decimal(1),         'units': '',       'type': 'uint32'},
-    '5082':  {'name': 'work_state_3',                            'scale': Decimal(1),         'units': '',       'type': 'uint32'},
+    # '5081':  {'name': 'work_state_2',                            'scale': Decimal(1),         'units': '',       'type': 'uint32'},
+    # '5082':  {'name': 'work_state_3',                            'scale': Decimal(1),         'units': '',       'type': 'uint32'},
     '5083':  {'name': 'meter_power',                             'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
-    # '5084':  {'name': 'meter_power_2',                           'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
+    '5084':  {'name': 'meter_power_2',                           'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
     '5085':  {'name': 'meter_power_A',                           'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
-    # '5086':  {'name': 'meter_power_A_2',                         'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
+    '5086':  {'name': 'meter_power_A_2',                         'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
     '5087':  {'name': 'meter_power_B',                           'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
-    # '5088':  {'name': 'meter_power_B_2',                         'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
+    '5088':  {'name': 'meter_power_B_2',                         'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
     '5089':  {'name': 'meter_power_C',                           'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
-    # '5090':  {'name': 'meter_power_C_2',                         'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
+    '5090':  {'name': 'meter_power_C_2',                         'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
     '5091':  {'name': 'load_power',                              'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
-    # '5092':  {'name': 'load_power_2',                            'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
+    '5092':  {'name': 'load_power_2',                            'scale': Decimal(1),         'units': 'W',      'type': 'int32'},
     '5093':  {'name': 'daily_export_energy',                     'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
-    # '5094':  {'name': 'daily_export_energy_2',                   'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
+    '5094':  {'name': 'daily_export_energy_2',                   'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
     '5095':  {'name': 'lifetime_export_energy',                  'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
-    # '5096':  {'name': 'lifetime_export_energy_2',                'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
+    '5096':  {'name': 'lifetime_export_energy_2',                'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
     '5097':  {'name': 'daily_import_energy',                     'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
-    # '5098':  {'name': 'daily_import_energy_2',                   'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
+    '5098':  {'name': 'daily_import_energy_2',                   'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
     '5099':  {'name': 'lifetime_import_energy',                  'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
-    # '5100':  {'name': 'lifetime_import_energy_2',                'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
+    '5100':  {'name': 'lifetime_import_energy_2',                'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
     '5101':  {'name': 'daily_direct_consumption_energy',         'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
-    # '5102':  {'name': 'daily_direct_consumption_energy_2',       'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
+    '5102':  {'name': 'daily_direct_consumption_energy_2',       'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
     '5103':  {'name': 'lifetime_direct_consumption_energy',      'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
-    # '5104':  {'name': 'lifetime_direct_consumption_energy_2',    'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
+    '5104':  {'name': 'lifetime_direct_consumption_energy_2',    'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
     '5113':  {'name': 'daily_runtime',                           'scale': Decimal(1),         'units': 'min',    'type': 'uint16'}, 
     '5114':  {'name': 'country',                                 'scale': Decimal(1),         'units': 'UNK',    'type': 'uint16'},
     '5128':  {'name': 'monthly_power',                           'scale': Decimal(100),       'units': 'W',      'type': 'uint32'},
-    # '5129':  {'name': 'monthly_power_2',                         'scale': Decimal(100),       'units': 'W',      'type': 'uint32'},
-    # '5144':  {'name': 'lifetime_power_yeild',                    'scale': Decimal(100),       'units': 'W',      'type': 'uint32'},
-    # '5145':  {'name': 'lifetime_power_yeild_2',                  'scale': Decimal(100),       'units': 'W',      'type': 'uint32'},
+    '5129':  {'name': 'monthly_power_2',                         'scale': Decimal(100),       'units': 'W',      'type': 'uint32'},
+    '5144':  {'name': 'lifetime_power_yeild',                    'scale': Decimal(100),       'units': 'W',      'type': 'uint32'},
+    '5145':  {'name': 'lifetime_power_yeild_2',                  'scale': Decimal(100),       'units': 'W',      'type': 'uint32'},
     '5146':  {'name': 'negative_voltage_to_ground',              'scale': Decimal('0.1'),     'units': 'V',      'type': 'int16'},
     '5147':  {'name': 'bus_voltage',                             'scale': Decimal('0.1'),     'units': 'V',      'type': 'uint16'},  
-    # '5148':  {'name': 'grid_frequency_2',                        'scale': Decimal('0.1'),     'units': 'Hz',     'type': 'uint16'},  
+    '5148':  {'name': 'grid_frequency_2',                        'scale': Decimal('0.1'),     'units': 'Hz',     'type': 'uint16'},  
   },
   'holding': {
     '5000':  {'name': 'date_year',         'scale': 1,              'units': 'year'},
@@ -177,11 +177,18 @@ class PVInverter_SunGrow(BasePVInverter):
 
         if key in self._register_map[func]:
           reg = self._register_map[func][key]
-          self.registers[reg['name']] = val * reg['scale']
-          if reg['type'] == 'int16' and self.registers[reg['name']] >= 2**15:
-            self.registers[reg['name']] -= 2**16
-          elif reg['type'] == 'int32' and self.registers[reg['name']] >= 2**31:
-            self.registers[reg['name']] -= 2**32
+          reg_name = reg['name']
+          reg_scale = reg['scale']
+          if reg['type'] == 'int16' and self.registers[reg_name] >= 2**15:
+            self.registers[reg_name] = (val - 2**16) * reg_scale
+          elif reg['type'] == 'int32' and self.registers[reg_name] >= 2**15:
+            self.registers[reg_name] = (val - 2**16) * reg_scale
+          else:
+            self.registers[reg_name] = val * reg_scale
+          if reg_name.endswith('_2'):
+            self.registers[reg_name[0:-2]] += self.registers[reg_name]
+            self.registers.pop(reg_name)
+
 
     except Exception as err:
       _logger.error("Error: %s" % err)
