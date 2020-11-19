@@ -108,7 +108,7 @@ _register_map = {
     '5145':  {'name': 'lifetime_power_yeild_2',                  'scale': Decimal(100),       'units': 'W',      'type': 'uint32'},
     '5146':  {'name': 'negative_voltage_to_ground',              'scale': Decimal('0.1'),     'units': 'V',      'type': 'int16'},
     '5147':  {'name': 'bus_voltage',                             'scale': Decimal('0.1'),     'units': 'V',      'type': 'uint16'},  
-    '5148':  {'name': 'grid_frequency_2',                        'scale': Decimal('0.1'),     'units': 'Hz',     'type': 'uint16'},  
+    # '5148':  {'name': 'grid_frequency_fine',                     'scale': Decimal('0.01'),     'units': 'Hz',    'type': 'uint16'},  
   },
   'holding': {
     '5000':  {'name': 'date_year',         'scale': 1,               'units': 'year',      'type': 'uint16'},
@@ -144,7 +144,7 @@ class PVInverter_SunGrow(BasePVInverter):
       start = -1
       for k in sorted(self._register_map[func].keys()):
         group  = int(k) - int(k) % 100
-        if (start < group):
+        if (start <= group):
           self._load_registers(func, group, 100)
           start = group + 100
 
