@@ -120,8 +120,17 @@ class PVReport_influxdb(BasePVOutput):
 
   def publish(self, data):
     # TODO
-    fields = {k:v for (k,v) in data.items() if not k.startswith("date_") and k != "timestamp"}
-    tags = {k:v for (k,v) in data.items() if k.startswith("date_")}
+    fields = {}
+    tags = {}
+
+    for (k,v) in data.items():
+      if not k.startswith("date_") and not k.startswith("fault_") and not k.startswith("tag_") and k != "timestamp" :
+        fields[k] = v
+      elif k.startswith("date_") or k.startswith("fault_"):
+        tags[k]=v
+      elif k.startswith("tag_"):
+        tags[k[4:]]=v
+
     tags.update(self.tags)
     metrics = [{'measurement': self.measurement,
                'tags': tags,
