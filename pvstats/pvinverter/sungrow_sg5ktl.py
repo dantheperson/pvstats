@@ -111,12 +111,12 @@ _register_map = {
     '5148':  {'name': 'grid_frequency_2',                        'scale': Decimal('0.1'),     'units': 'Hz',     'type': 'uint16'},  
   },
   'holding': {
-    '5000':  {'name': 'date_year',         'scale': 1,              'units': 'year'},
-    '5001':  {'name': 'date_month',        'scale': 1,              'units': 'month'},
-    '5002':  {'name': 'date_day',          'scale': 1,              'units': 'day'},
-    '5003':  {'name': 'date_hour',         'scale': 1,              'units': 'hour'},
-    '5004':  {'name': 'date_minute',       'scale': 1,              'units': 'minute'},
-    '5005':  {'name': 'date_second',       'scale': 1,              'units': 'second'},
+    '5000':  {'name': 'date_year',         'scale': 1,               'units': 'year',      'type': 'uint16'},
+    '5001':  {'name': 'date_month',        'scale': 1,              'units': 'month',      'type': 'uint16'},
+    '5002':  {'name': 'date_day',          'scale': 1,              'units': 'day',        'type': 'uint16'},
+    '5003':  {'name': 'date_hour',         'scale': 1,              'units': 'hour',       'type': 'uint16'},
+    '5004':  {'name': 'date_minute',       'scale': 1,              'units': 'minute',     'type': 'uint16'},
+    '5005':  {'name': 'date_second',       'scale': 1,              'units': 'second',     'type': 'uint16'},
   }
 }
 
@@ -179,9 +179,9 @@ class PVInverter_SunGrow(BasePVInverter):
           reg = self._register_map[func][key]
           reg_name = reg['name']
           reg_scale = reg['scale']
-          if reg['type'] == 'int16' and val >= 2**15:
+          if reg.get('type') == 'int16' and val >= 2**15:
             self.registers[reg_name] = (val - 2**16) * reg_scale
-          elif reg['type'] == 'int32' and val >= 2**15:
+          elif reg.get('type') == 'int32' and val >= 2**15:
             self.registers[reg_name] = (val - 2**16) * reg_scale
           else:
             self.registers[reg_name] = val * reg_scale
