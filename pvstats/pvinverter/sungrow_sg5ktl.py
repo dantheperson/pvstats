@@ -74,7 +74,7 @@ _register_map = {
     '5043':  {'name': 'fault_minute',                            'scale': Decimal(1),         'units': '',       'type': 'uint16'},
     '5044':  {'name': 'fault_second',                            'scale': Decimal(1),         'units': '',       'type': 'uint16'},
     '5045':  {'name': 'tag_fault_code',                          'scale': Decimal(1),         'units': '',       'type': 'uint16'},
-    '5049':  {'name': 'nominal_reactive_power',                  'scale': Decimal(100),       'units': 'VA',     'type': 'uint16'},
+    '5049':  {'name': 'tag_nominal_reactive_power',              'scale': Decimal(100),       'units': 'VA',     'type': 'uint16'},
     '5071':  {'name': 'ground_impedance',                        'scale': Decimal(1000),      'units': 'Ohm',    'type': 'uint16'},
     # '5081':  {'name': 'work_state_2',                            'scale': Decimal(1),         'units': '',       'type': 'uint32'},
     # '5082':  {'name': 'work_state_3',                            'scale': Decimal(1),         'units': '',       'type': 'uint32'},
@@ -155,6 +155,12 @@ class PVInverter_SunGrow(BasePVInverter):
                                            self.registers['date_day'],    self.registers['date_hour'],
                                            self.registers['date_minute'], self.registers['date_second']).timestamp()
 
+  def _2x_16_to_32(self,int16_1,int16_2):
+    hx16_1 = str(hex(int(int16_1)))[2:]
+    hx16_2 = str(hex(int(int16_2)))[2:]
+    hx32 = hx16_1 + hx16_2
+    return int(hx32,16)
+
   def _load_registers(self,func,start,count=100):
     try:
       if func == 'input':
@@ -177,16 +183,20 @@ class PVInverter_SunGrow(BasePVInverter):
 
         if key in self._register_map[func]:
           reg = self._register_map[func][key]
-          reg_name = reg['name']
-          reg_scale = reg['scale']
-          if reg.get('type') == 'int16' and val >= 2**15:
+          reg_name = reg.get('name')
+          reg_scale = reg.get('scale')
+          reg_type = reg.get('type')
+          if reg_type == 'int16' and val >= 2**15:
             self.registers[reg_name] = (val - 2**16) * reg_scale
-          elif reg.get('type') == 'int32' and val >= 2**15:
+          elif reg_type == 'int32' and val >= 2**15:
             self.registers[reg_name] = (val - 2**16) * reg_scale
           else:
             self.registers[reg_name] = val * reg_scale
           if reg_name.endswith('_2'):
-            self.registers[reg_name[0:-2]] += self.registers[reg_name]
+            reg_2 = self.registers[reg_name] / reg_scale
+            reg_name_1 = reg_name[0:-2]
+            reg_1 = self.registers[reg_name_1] / reg_scale
+            self.registers[reg_name[0:-2]] = self._2x_16_to_32(reg_2 , reg_1 ) * reg_scale
             self.registers.pop(reg_name)
 
 
