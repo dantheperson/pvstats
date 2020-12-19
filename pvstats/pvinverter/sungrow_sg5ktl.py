@@ -156,10 +156,28 @@ class PVInverter_SunGrow(BasePVInverter):
                                            self.registers['date_minute'], self.registers['date_second']).timestamp()
 
   def _2x_16_to_32(self,int16_1,int16_2):
-    hx16_1 = str(hex(int(int16_1)))[2:]
-    hx16_2 = str(hex(int(int16_2)))[2:]
+    if int16_1 < 0 and int16_2 < 0:
+      tag = 3
+      sign = -1
+    elif int16_1 >= 0 and int16_2 >= 0:
+      tag = 2
+      sign = 1
+    else:
+      raise ArithmeticError("Signs don't match for ints")
+    iint16_1 = int(int16_1)
+    iint16_2 = int(int16_2)
+    hxint16_1 = hex(abs(iint16_1))
+    hxint16_2 = hex(abs(iint16_2))
+    hx16_1 = str(hxint16_1)[tag:]
+    hx16_2 = str(hxint16_2)[tag:]
     hx32 = hx16_1 + hx16_2
-    return int(hx32,16)
+    print(int16_1,int16_2,int16_1+int16_2)
+    try:
+      int32 = int(hx32,16) * sign
+      print(int32)
+    except:
+      pass
+    return int32
 
   def _load_registers(self,func,start,count=100):
     try:
