@@ -171,10 +171,8 @@ class PVInverter_SunGrow(BasePVInverter):
     hx16_1 = str(hxint16_1)[tag:]
     hx16_2 = str(hxint16_2)[tag:]
     hx32 = hx16_1 + hx16_2
-    print(int16_1,int16_2,int16_1+int16_2)
     try:
       int32 = int(hx32,16) * sign
-      print(int32)
     except:
       pass
     return int32
