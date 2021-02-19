@@ -196,7 +196,7 @@ class PVInverter_SunGrow(BasePVInverter):
       for x in range(0, count):
         key  = str(start + x + 1)
         val  = rq.registers[x]
-         _logger.debug(f'{key}: {val}')
+        _logger.debug(f'{key}: {val}')
         if key in self._register_map[func]:
           reg = self._register_map[func][key]
           reg_name = reg.get('name')
