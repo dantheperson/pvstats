@@ -48,7 +48,7 @@ class PVReport_pvoutput(BasePVOutput):
   def publish(self, data):
     sample = {'date':             data['timestamp'].strftime("%Y%m%d"),
               'time':             data['timestamp'].strftime("%H:%M"),
-              'energy_generation':data['daily_pv_power'],
+              'energy_generation':data['daily_pv_energy'],
               'power_generation': data['total_pv_power'],
               'temperature':      data['internal_temp'],
               'voltage':         (data['pv1_voltage'] + data['pv2_voltage'])}

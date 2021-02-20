@@ -36,7 +36,7 @@ _logger = logging.getLogger(__name__)
 
 _register_map = {
   'input': {
-    5003:  {'name': 'daily_pv_power', 'scale': Decimal(100), 'units': 'W', 'type': 'uint16'},
+    5003:  {'name': 'daily_pv_energy', 'scale': Decimal(100), 'units': 'W', 'type': 'uint16'},
     5004:  {'name': 'lifetime_pv_power', 'scale': Decimal(1), 'units': 'kW', 'type': 'uint16'},
     5006:  {'name': 'total_run_time', 'scale': Decimal(1), 'units': 'W', 'type': 'uint16'},
     5008:  {'name': 'internal_temp', 'scale': Decimal('0.1'), 'units': 'C', 'type': 'uint16'},

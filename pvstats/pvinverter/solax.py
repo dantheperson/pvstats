@@ -46,7 +46,7 @@ class PVInverter_Solax(BasePVInverter):
     #print json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '),default=str)
 
     self.registers = {'timestamp':     datetime.now(),
-                      'daily_pv_power':Decimal(data['Data'][8]*1000),
+                      'daily_pv_energy':Decimal(data['Data'][8]*1000),
                       'total_pv_power':Decimal(data['Data'][6]),
                       'internal_temp': Decimal(data['Data'][7]),
                       'pv1_voltage':   Decimal(data['Data'][2]).quantize(Decimal('.1')),
