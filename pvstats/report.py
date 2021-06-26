@@ -126,7 +126,7 @@ class PVReport_influxdb(BasePVOutput):
     for (k,v) in data.items():
       if not k.startswith("date_") and not k.startswith("fault_") and not k.startswith("tag_") and k != "timestamp" :
         fields[k] = v
-      elif k.startswith("date_") or k.startswith("fault_"):
+      elif k.startswith("fault_"):
         tags[k]=v
       elif k.startswith("tag_"):
         tags[k[4:]]=v
