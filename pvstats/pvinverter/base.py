@@ -20,19 +20,24 @@ from pymodbus.constants import Defaults
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.transaction import ModbusSocketFramer
 
-class BasePVInverter(object):
-  def __init__(self):
-    self.registers = {}
 
-  def connect(self): pass
-  def read(self): pass
-  def close(self): pass
+class BasePVInverter(object):
+    def __init__(self):
+        self.registers = {}
+
+    def connect(self):
+        pass
+
+    def read(self):
+        pass
+
+    def close(self):
+        pass
+
 
 #-----------------
 # Exported symbols
 #-----------------
-__all__ = [
-  "BasePVInverter"
-]
+__all__ = ["BasePVInverter"]
 
-# vim: set expandtab ts=2 sw=2:
+

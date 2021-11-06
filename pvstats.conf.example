@@ -1,46 +1,46 @@
 {
-  "inverter":{
-    "model":"sungrow-sg5ktl",
-    "mode":"tcp",
-    "host":"sungrow.example.com",
-    "port":502
-  },
-  "reports":[
-    {
-      "type": "pvoutput",
-      "host":"pvoutput.org",
-      "rate_limit":"300",
-      "key":"TODO",
-      "system_id":"TODO"
+    "inverter":{
+        "model":"sungrow-sg5ktl",
+        "mode":"tcp",
+        "host":"sungrow.example.com",
+        "port":502
     },
-    {
-      "type": "influxdb",
-      "host":"influxdb.example.com",
-      "port":8086,
-      "user":"user",
-      "password":"password",
-      "db":"pvstats",
-      "ssl":"1",
-      "verify_ssl":"0",
-      "measurement": "sungrow",
-      "tags": {
-        "location": "Perth"
+    "reports":[
+        {
+            "type": "pvoutput",
+            "host":"pvoutput.org",
+            "rate_limit":"300",
+            "key":"TODO",
+            "system_id":"TODO"
+        },
+        {
+            "type": "influxdb",
+            "host":"influxdb.example.com",
+            "port":8086,
+            "user":"user",
+            "password":"password",
+            "db":"pvstats",
+            "ssl":"1",
+            "verify_ssl":"0",
+            "measurement": "sungrow",
+            "tags": {
+                "location": "Perth"
+                }
         }
-    }
-    {
-      "type":"mqtt",
-      "host":"mqtt.example.com",
-      "port":1083,
-      "tls":false,
-      "user":"user",
-      "password":"password",
-      "topic":"/solar/inverter/status",
-      "qos":2
-    }
-  ],
+        {
+            "type":"mqtt",
+            "host":"mqtt.example.com",
+            "port":1083,
+            "tls":false,
+            "user":"user",
+            "password":"password",
+            "topic":"/solar/inverter/status",
+            "qos":2
+        }
+    ],
 
-  "sample_period":10,
-  "log_level":"INFO",
-  "night_offset": 10,
-  "location": "Perth"
+    "sample_period":10,
+    "log_level":"INFO",
+    "night_offset": 10,
+    "location": "Perth"
 }

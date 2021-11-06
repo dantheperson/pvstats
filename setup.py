@@ -13,7 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """
 Installs pvstats using distutils
 Run:
@@ -26,16 +25,17 @@ from setuptools import find_packages
 
 print(find_packages(exclude=['test']))
 
-setup(name='pvstats',
-      version='1.0',
-      description='Photovoltaic Inverter Statistics Scanner and Uploader',
-      long_description="""
+setup(
+    name='pvstats',
+    version='1.0',
+    description='Photovoltaic Inverter Statistics Scanner and Uploader',
+    long_description="""
         TODO
       """,
-      url='https://www.github.com/damianolombardo/pvstats/',
-      author='Damiano Lombardo',
-      author_email='lombardo.damiano@gmail.com',
-      classifiers=[
+    url='https://www.github.com/damianolombardo/pvstats/',
+    author='Damiano Lombardo',
+    author_email='lombardo.damiano@gmail.com',
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
         'License :: OSI Approved :: Apache 2.0 License',
@@ -45,18 +45,13 @@ setup(name='pvstats',
         'Operating System :: POSIX',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
-      ],
-      keywords='photovoltaics,influxdb,pvoutput.org',
-      # TODO: I don't really understand packages
-      packages=find_packages(exclude=['test']),
-      install_requires=[
-        'pymodbus',
-        'influxdb',
-        'paho-mqtt',
-        'pyserial >= 2.6',
-        'pycryptodome',
-        'SungrowModbusTcpClient',
-        'Astral'
-      ],
-      platforms=['Linux', 'Mac OS X', 'Win'],
-     )
+    ],
+    keywords='photovoltaics,influxdb,pvoutput.org',
+    # TODO: I don't really understand packages
+    packages=find_packages(exclude=['test']),
+    install_requires=[
+        'pymodbus', 'influxdb', 'paho-mqtt', 'pyserial >= 2.6', 'pycryptodome',
+        'SungrowModbusTcpClient', 'Astral'
+    ],
+    platforms=['Linux', 'Mac OS X', 'Win'],
+)

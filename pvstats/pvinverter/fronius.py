@@ -24,23 +24,26 @@ from urllib.request import urlopen
 import json
 
 import logging
+
 _logger = logging.getLogger(__name__)
 
+
 class PVInverter_Fronius(BasePVInverter):
-  def __init__(self, cfg, **kwargs):
-    self.url = "http://{}:{}/solar_api/v1/GetInverterRealtimeData.cgi?Scope=Device&DeviceID=1&DataCollection=CommonInverterData".format(cfg["host"],cfg["port"])
+    def __init__(self, cfg, **kwargs):
+        self.url = "http://{}:{}/solar_api/v1/GetInverterRealtimeData.cgi?Scope=Device&DeviceID=1&DataCollection=CommonInverterData".format(
+            cfg["host"], cfg["port"])
 
-  def connect(self):
-    pass
+    def connect(self):
+        pass
 
-  def close(self):
-    pass
+    def close(self):
+        pass
 
-  def read(self):
-    """Reads the PV inverters status"""
+    def read(self):
+        """Reads the PV inverters status"""
 
-    # Dummy data
-    response = """
+        # Dummy data
+        response = """
 {
   "Body": {
     "Data": {
@@ -107,27 +110,38 @@ class PVInverter_Fronius(BasePVInverter):
 }
 """
 
-    response = urlopen(self.url).read()
-    data = json.loads(response)
-    d = json.dumps(data, sort_keys=True, indent=2, separators=(',', ': '),default=str)
-    print(d)
+        response = urlopen(self.url).read()
+        data = json.loads(response)
+        d = json.dumps(data,
+                       sort_keys=True,
+                       indent=2,
+                       separators=(',', ': '),
+                       default=str)
+        print(d)
 
-    self.registers = {'timestamp':     datetime.strptime(data['Head']['Timestamp'][:-6], "%Y-%m-%dT%H:%M:%S"),
-                      'daily_pv_energy':Decimal(data['Body']['Data']['DAY_ENERGY']['Value']),
-                      'total_pv_power':Decimal(data['Body']['Data']['PAC']['Value']),
-                      #'internal_temp': Decimal(data['Body']['Data']['T_AMBIENT']['Value']).quantize(Decimal('.1')),
-                      'internal_temp': Decimal(0),
-                      'pv1_voltage':   Decimal(data['Body']['Data']['UDC']['Value']),
-                      'pv2_voltage':   Decimal('0')}
+        self.registers = {
+            'timestamp':
+            datetime.strptime(data['Head']['Timestamp'][:-6],
+                              "%Y-%m-%dT%H:%M:%S"),
+            'daily_pv_energy':
+            Decimal(data['Body']['Data']['DAY_ENERGY']['Value']),
+            'total_pv_power':
+            Decimal(data['Body']['Data']['PAC']['Value']),
+            #'internal_temp': Decimal(data['Body']['Data']['T_AMBIENT']['Value']).quantize(Decimal('.1')),
+            'internal_temp':
+            Decimal(0),
+            'pv1_voltage':
+            Decimal(data['Body']['Data']['UDC']['Value']),
+            'pv2_voltage':
+            Decimal('0')
+        }
 
-    print(self.registers)
+        print(self.registers)
 
 
 #-----------------
 # Exported symbols
 #-----------------
-__all__ = [
-  "PVInverter_Fronius"
-]
+__all__ = ["PVInverter_Fronius"]
 
-# vim: set expandtab ts=2 sw=2:
+

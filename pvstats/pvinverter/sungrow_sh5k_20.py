@@ -29,9 +29,11 @@ from time import sleep
 import serial.rs485
 
 from decimal import Decimal, getcontext
+
 getcontext().prec = 9
 
 import logging
+
 _logger = logging.getLogger(__name__)
 
 _register_map = {
@@ -135,113 +137,124 @@ _register_map = {
     5005:  {'name': 'date_second', 'scale': 1, 'units': 'second', 'type': 'uint16'},
   }
 }
-
 class PVInverter_SunGrow_sh5k_20(BasePVInverter):
-  def __init__(self, cfg, **kwargs):
-    super(PVInverter_SunGrow_sh5k_20, self).__init__()
-    self.cfg = cfg
-    self.init_modbus_client()
-
-  def init_modbus_client(self):
-    self.client = SungrowModbusTcpClient(host=self.cfg['host'],          port=self.cfg['port'],
-                                  framer=ModbusSocketFramer, timeout=5,
-                                  RetryOnEmpty=True,         retries=5)
-
-  def connect(self):
-    self.client.connect()
-
-  def close(self):
-    self.client.close()
-
-  def read(self):
-    """Reads the PV inverters status"""
-
-    # Read holding and input registers in groups aligned on the 100
-    for func in _register_map:
-      start = -1
-      for k in sorted(_register_map[func].keys()):
-        group  = int(k) - int(k) % 100
-        if (start < group):
-          # Wait 500ms between modbus reads as per https://c.tjhowse.com/misc/SolarInfo%20Logger%20User%20Manual.pdf page 89
-          # This isn't enough though. Sometimes the modbus minion doesn't respond inside the (current) five second timeout.
-          sleep(0.5)
-          self._load_registers(func, group, 100)
-          start = group + 100
-
-    # Manually calculate the power and the timestamps
-    self.registers['pv1_power'] = round(self.registers['pv1_current'] * self.registers['pv1_voltage'])
-    self.registers['pv2_power'] = round(self.registers['pv2_current'] * self.registers['pv2_voltage'])
-    self.registers['timestamp'] = datetime(self.registers['date_year'],   self.registers['date_month'],
-                                           self.registers['date_day'],    self.registers['date_hour'],
-                                           self.registers['date_minute'], self.registers['date_second'])
-
-    floaty = {}
-    for key in self.registers.keys():
-      try:
-        floaty[key] = float(self.registers[key])
-      except:
-        floaty[key] = self.registers[key]
-    self.registers = floaty
-
-
-  def _load_registers(self,func,start,count=100):
-    try:
-      if func == 'input':
-        rq = self.client.read_input_registers(start, count, unit=0x01)
-      elif func == 'holding':
-        # Holding registers need an offset
-        start = start - 1
-        rq = self.client.read_holding_registers(start, count, unit=0x01)
-      else:
-        raise Exception("Unknown register type: {}".format(type))
-
-
-      if isinstance(rq, ModbusIOException):
-        _logger.error("Error: {}".format(rq))
+    def __init__(self, cfg, **kwargs):
+        super(PVInverter_SunGrow_sh5k_20, self).__init__()
+        self.cfg = cfg
         self.init_modbus_client()
-        raise Exception("ModbusIOException")
 
-      for x in range(0, count):
-        key  = start + x + 1
-        val  = rq.registers[x]
+    def init_modbus_client(self):
+        self.client = SungrowModbusTcpClient(host=self.cfg['host'],
+                                             port=self.cfg['port'],
+                                             framer=ModbusSocketFramer,
+                                             timeout=5,
+                                             RetryOnEmpty=True,
+                                             retries=5)
 
-        if key in _register_map[func]:
-          reg = _register_map[func][key]
-          self.registers[reg['name']] = val * reg['scale']
-          if reg['type'] == 'int16' and self.registers[reg['name']] >= 2**15:
-            self.registers[reg['name']] -= 2**16
+    def connect(self):
+        self.client.connect()
 
+    def close(self):
+        self.client.close()
 
+    def read(self):
+        """Reads the PV inverters status"""
 
-    except Exception as err:
-      _logger.error("Error: %s" % err)
-      _logger.debug("{}, start: {}, count: {}".format(type, start, count))
-      raise
+        # Read holding and input registers in groups aligned on the 100
+        for func in _register_map:
+            start = -1
+            for k in sorted(_register_map[func].keys()):
+                group = int(k) - int(k) % 100
+                if (start < group):
+                    # Wait 500ms between modbus reads as per https://c.tjhowse.com/misc/SolarInfo%20Logger%20User%20Manual.pdf page 89
+                    # This isn't enough though. Sometimes the modbus minion doesn't respond inside the (current) five second timeout.
+                    sleep(0.5)
+                    self._load_registers(func, group, 100)
+                    start = group + 100
+
+        # Manually calculate the power and the timestamps
+        self.registers['pv1_power'] = round(self.registers['pv1_current'] *
+                                            self.registers['pv1_voltage'])
+        self.registers['pv2_power'] = round(self.registers['pv2_current'] *
+                                            self.registers['pv2_voltage'])
+        self.registers['timestamp'] = datetime(self.registers['date_year'],
+                                               self.registers['date_month'],
+                                               self.registers['date_day'],
+                                               self.registers['date_hour'],
+                                               self.registers['date_minute'],
+                                               self.registers['date_second'])
+
+        floaty = {}
+        for key in self.registers.keys():
+            try:
+                floaty[key] = float(self.registers[key])
+            except:
+                floaty[key] = self.registers[key]
+        self.registers = floaty
+
+    def _load_registers(self, func, start, count=100):
+        try:
+            if func == 'input':
+                rq = self.client.read_input_registers(start, count, unit=0x01)
+            elif func == 'holding':
+                # Holding registers need an offset
+                start = start - 1
+                rq = self.client.read_holding_registers(start,
+                                                        count,
+                                                        unit=0x01)
+            else:
+                raise Exception("Unknown register type: {}".format(type))
+
+            if isinstance(rq, ModbusIOException):
+                _logger.error("Error: {}".format(rq))
+                self.init_modbus_client()
+                raise Exception("ModbusIOException")
+
+            for x in range(0, count):
+                key = start + x + 1
+                val = rq.registers[x]
+
+                if key in _register_map[func]:
+                    reg = _register_map[func][key]
+                    self.registers[reg['name']] = val * reg['scale']
+                    if reg['type'] == 'int16' and self.registers[
+                            reg['name']] >= 2**15:
+                        self.registers[reg['name']] -= 2**16
+
+        except Exception as err:
+            _logger.error("Error: %s" % err)
+            _logger.debug("{}, start: {}, count: {}".format(
+                type, start, count))
+            raise
+
 
 class PVInverter_SunGrow_sh5k_20RTU(PVInverter_SunGrow_sh5k_20):
-  def __init__(self, cfg, **kwargs):
-    super(PVInverter_SunGrow_sh5k_20, self).__init__()
+    def __init__(self, cfg, **kwargs):
+        super(PVInverter_SunGrow_sh5k_20, self).__init__()
 
-    # Configure the Modbus Remote Terminal Unit settings
-    self.client = ModbusSerialClient(method='rtu', port=cfg['dev'], timeout=0.5,
-                                     stopbits = 1, bytesize =8, parity='N', baudrate=9600)
+        # Configure the Modbus Remote Terminal Unit settings
+        self.client = ModbusSerialClient(method='rtu',
+                                         port=cfg['dev'],
+                                         timeout=0.5,
+                                         stopbits=1,
+                                         bytesize=8,
+                                         parity='N',
+                                         baudrate=9600)
 
-  def connect(self):
-    # Connect then configure the port
-    self.client.connect()
+    def connect(self):
+        # Connect then configure the port
+        self.client.connect()
 
-    # Configure the RS485 port - This seems not needed
-    #rs485_mode = serial.rs485.RS485Settings(delay_before_tx = 0, delay_before_rx = 0,
-    #                                        rts_level_for_tx=True, rts_level_for_rx=False,
-    #                                        loopback=False)
-    #self.client.socket.rs485_mode = rs485_mode
+        # Configure the RS485 port - This seems not needed
+        #rs485_mode = serial.rs485.RS485Settings(delay_before_tx = 0, delay_before_rx = 0,
+        #                                        rts_level_for_tx=True, rts_level_for_rx=False,
+        #                                        loopback=False)
+        #self.client.socket.rs485_mode = rs485_mode
 
 
 #-----------------
 # Exported symbols
 #-----------------
-__all__ = [
-  "PVInverter_SunGrow_sh5k_20", "PVInverter_SunGrow_sh5k_20RTU"
-]
+__all__ = ["PVInverter_SunGrow_sh5k_20", "PVInverter_SunGrow_sh5k_20RTU"]
 
-# vim: set expandtab ts=2 sw=2:
+

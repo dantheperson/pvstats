@@ -31,46 +31,53 @@ from pvstats.pvinverter.base import BasePVInverter
 
 from random import randint
 
-class PVInverter_Test(BasePVInverter):
-  def __init__(self): pass
-  def connect(self): pass
-  def read(self):
-    self.registers = {'timestamp':datetime.now().timestamp(),
-                      'daily_pv_energy':Decimal('2300') + randint(0,1000),
-                      'total_pv_power':Decimal('2100') + randint(0,1000),
-                      'internal_temp': Decimal('41.2') + randint(0,10),
-                      'pv1_voltage':   Decimal('213')  + randint(0,30),
-                      'pv2_voltage':   Decimal('125')  + randint(0,20)}
 
-  def close(self): pass
+class PVInverter_Test(BasePVInverter):
+    def __init__(self):
+        pass
+
+    def connect(self):
+        pass
+
+    def read(self):
+        self.registers = {
+            'timestamp': datetime.now().timestamp(),
+            'daily_pv_energy': Decimal('2300') + randint(0, 1000),
+            'total_pv_power': Decimal('2100') + randint(0, 1000),
+            'internal_temp': Decimal('41.2') + randint(0, 10),
+            'pv1_voltage': Decimal('213') + randint(0, 30),
+            'pv2_voltage': Decimal('125') + randint(0, 20)
+        }
+
+    def close(self):
+        pass
+
 
 # Factory class for the PV Inverter
 def PVInverterFactory(model, cfg):
-  if (model == "test"):
-    return PVInverter_Test()
-  elif (model == "sungrow-sg-ktl" and cfg['mode'] == 'rtu'):
-    return PVInverter_SunGrowRTU(cfg)
-  elif (model == "sungrow-sg-ktl"):
-    # Assume TCP
-    return PVInverter_SunGrow(cfg)
-  elif (model == "sungrow-sh5k-20"):
-    # Assume TCP
-    return PVInverter_SunGrow_sh5k_20(cfg)
-  elif (model == "fronius"):
-    # Assume TCP
-    return PVInverter_Fronius(cfg)
-  elif (model == "solax"):
-    # Assume TCP
-    return PVInverter_Solax(cfg)
-  else:
-    raise ValueError("Unable to find PVInverter for {}".format(model))
+    if (model == "test"):
+        return PVInverter_Test()
+    elif (model == "sungrow-sg-ktl" and cfg['mode'] == 'rtu'):
+        return PVInverter_SunGrowRTU(cfg)
+    elif (model == "sungrow-sg-ktl"):
+        # Assume TCP
+        return PVInverter_SunGrow(cfg)
+    elif (model == "sungrow-sh5k-20"):
+        # Assume TCP
+        return PVInverter_SunGrow_sh5k_20(cfg)
+    elif (model == "fronius"):
+        # Assume TCP
+        return PVInverter_Fronius(cfg)
+    elif (model == "solax"):
+        # Assume TCP
+        return PVInverter_Solax(cfg)
+    else:
+        raise ValueError("Unable to find PVInverter for {}".format(model))
 
 
 #-----------------
 # Exported symbols
 #-----------------
-__all__ = [
-  "PVInverterFactory"
-]
+__all__ = ["PVInverterFactory"]
 
-# vim: set expandtab ts=2 sw=2:
+

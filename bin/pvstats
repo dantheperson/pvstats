@@ -37,113 +37,113 @@ _log = logging.getLogger()
 
 # Load the configuration
 def load_config(location):
-  with open(location) as f:
-    cfg = json.load(f)
+    with open(location) as f:
+        cfg = json.load(f)
 
-  try:
-    if cfg.get('log_level') is not None:
-      _log.setLevel(cfg['log_level'])
-  except:
-    _log.setLevel('INFO')
-  return cfg
+    try:
+        if cfg.get('log_level') is not None:
+            _log.setLevel(cfg['log_level'])
+    except:
+        _log.setLevel('INFO')
+    return cfg
 
 # Determine the panel sleep time
+
+
 def inverter_sleep(location_name, offset):
-  try:
-    location = lookup(location_name, database())
-  except KeyError as e:
-    _log.warning(f'Location Error {e}')
-    return False
-  now = datetime.now(location.tzinfo)
-  s = sun(location.observer, date=now, tzinfo=location.timezone)    
-    
-  if now < s['noon']:
-    _log.debug('before noon')
-    midday_offset = 0
-  else:
-    _log.debug('after noon')
-    midday_offset = 1    
-  
-  d = daylight(location.observer, date=now, tzinfo=location.timezone)  
-  surise = d[0]
-  sunrise_offset = surise - timedelta(minutes=offset)
-  sunset = d[1]
-  sunset_offset = sunset + timedelta(minutes=offset)
+    try:
+        location = lookup(location_name, database())
+    except KeyError as e:
+        _log.warning(f'Location Error {e}')
+        return False
+    now = datetime.now(location.tzinfo)
+    s = sun(location.observer, date=now, tzinfo=location.timezone)
 
-  dT = daylight(location.observer, date=now+timedelta(days=midday_offset), tzinfo=location.timezone)
-  suriseT = dT[0]
-  sunriseT_offset = suriseT - timedelta(minutes=offset)
+    if now < s['noon']:
+        _log.debug('before noon')
+        midday_offset = 0
+    else:
+        _log.debug('after noon')
+        midday_offset = 1
 
-  if not sunrise_offset <= now <= sunset_offset:
-    
-    _log.info(f'Sleeping till {sunriseT_offset.strftime("%c %z")}')  
-    time.sleep((sunriseT_offset-now).seconds)
-    return True
-  
-  else:
-    _log.debug(f'Awake till {sunset_offset.strftime("%c %z")}')  
-    return False
+    d = daylight(location.observer, date=now, tzinfo=location.timezone)
+    surise = d[0]
+    sunrise_offset = surise - timedelta(minutes=offset)
+    sunset = d[1]
+    sunset_offset = sunset + timedelta(minutes=offset)
+
+    dT = daylight(location.observer, date=now+timedelta(days=midday_offset), tzinfo=location.timezone)
+    suriseT = dT[0]
+    sunriseT_offset = suriseT - timedelta(minutes=offset)
+
+    if not sunrise_offset <= now <= sunset_offset:
+
+        _log.info(f'Sleeping till {sunriseT_offset.strftime("%c %z")}')
+        time.sleep((sunriseT_offset-now).seconds)
+        return True
+
+    else:
+        _log.debug(f'Awake till {sunset_offset.strftime("%c %z")}')
+        return False
 
 
 def main():
-  # Parse input arguments
-  parser = argparse.ArgumentParser(
-      description="Photovoltaic Inverter Statistics Scanner and Uploader",
-      prog="pvstats",
-      usage="%(prog)s [options]")
-  parser.add_argument("--cfg", help="Configuration File", nargs=1, default=["./pvstats.conf"])
+    # Parse input arguments
+    parser = argparse.ArgumentParser(
+        description="Photovoltaic Inverter Statistics Scanner and Uploader",
+        prog="pvstats",
+        usage="%(prog)s [options]")
+    parser.add_argument("--cfg", help="Configuration File", nargs=1, default=["./pvstats.conf"])
 
-  args, unknown = parser.parse_known_args()
-  if unknown:
-    _log.error(f'unknown arguments passed; {unknown}')
-  # Initialise
-  cfg = load_config(vars(args)['cfg'][0])
+    args, unknown = parser.parse_known_args()
+    if unknown:
+        _log.error(f'unknown arguments passed; {unknown}')
+    # Initialise
+    cfg = load_config(vars(args)['cfg'][0])
 
-  # Get an PV inverter client
-  inverter = PVInverterFactory(cfg['inverter']['model'], cfg['inverter'])
+    # Get an PV inverter client
+    inverter = PVInverterFactory(cfg['inverter']['model'], cfg['inverter'])
 
-  # Create the report channels
-  reports = []
-  for rpt in cfg['reports']:
-    _log.debug(json.dumps(rpt, sort_keys=True,
-                         indent=4, separators=(',', ': '),default=str))
-    r = PVReportFactory(rpt)
-    if r != None:
-      reports.append(r)
+    # Create the report channels
+    reports = []
+    for rpt in cfg['reports']:
+        _log.debug(json.dumps(rpt, sort_keys=True, indent=4, separators=(',', ': '), default=str))
+        r = PVReportFactory(rpt)
+        if r != None:
+            reports.append(r)
 
-  night_offset = cfg.get('night_offset')
-  location = cfg.get('location')
-  while True:
-    if night_offset is not None and location is not None:
-      if inverter_sleep(location, night_offset):
-        return None
-    tstart = datetime.now()
-    try:
-      # Grab the data from the inverter
-      inverter.connect()
-      inverter.read()
+    night_offset = cfg.get('night_offset')
+    location = cfg.get('location')
+    while True:
+        if night_offset is not None and location is not None:
+            if inverter_sleep(location, night_offset):
+                return None
+        tstart = datetime.now()
+        try:
+            # Grab the data from the inverter
+            inverter.connect()
+            inverter.read()
 
-      # Log it
-      _log.debug(json.dumps(inverter.registers, sort_keys=True,
-                           indent=4, separators=(',', ': '),default=str))
+            # Log it
+            _log.debug(json.dumps(inverter.registers, sort_keys=True, indent=4, separators=(',', ': '), default=str))
 
-      # Publish it
-      for rpt in reports:
-        rpt.publish(inverter.registers)
+            # Publish it
+            for rpt in reports:
+                rpt.publish(inverter.registers)
 
-    except Exception as err:
-      _log.debug(traceback.format_exc())
-      _log.debug("Ignoring = {}".format(err))
+        except Exception as err:
+            _log.debug(traceback.format_exc())
+            _log.debug("Ignoring = {}".format(err))
 
-    finally:
-      inverter.close()
+        finally:
+            inverter.close()
 
-    tend = datetime.now()
-    time.sleep(max((tstart - tend).total_seconds() + cfg['sample_period'],0))
+        tend = datetime.now()
+        time.sleep(max((tstart - tend).total_seconds() + cfg['sample_period'], 0))
 
 
 if __name__ == "__main__":
-  while True:
-    main()
+    while True:
+        main()
 
 # vim: set expandtab ts=2 sw=2:
