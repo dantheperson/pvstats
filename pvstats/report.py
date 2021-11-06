@@ -48,7 +48,7 @@ class PVReport_pvoutput(BasePVOutput):
   def publish(self, data):
     sample = {'date':             data['timestamp'].strftime("%Y%m%d"),
               'time':             data['timestamp'].strftime("%H:%M"),
-              'energy_generation':data['daily_pv_power'],
+              'energy_generation':data['daily_pv_energy'],
               'power_generation': data['total_pv_power'],
               'temperature':      data['internal_temp'],
               'voltage':         (data['pv1_voltage'] + data['pv2_voltage'])}
@@ -126,7 +126,7 @@ class PVReport_influxdb(BasePVOutput):
     for (k,v) in data.items():
       if not k.startswith("date_") and not k.startswith("fault_") and not k.startswith("tag_") and k != "timestamp" :
         fields[k] = v
-      elif k.startswith("date_") or k.startswith("fault_"):
+      elif k.startswith("fault_"):
         tags[k]=v
       elif k.startswith("tag_"):
         tags[k[4:]]=v

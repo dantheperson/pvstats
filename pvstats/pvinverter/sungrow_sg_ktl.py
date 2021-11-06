@@ -153,7 +153,7 @@ class PVInverter_SunGrow(BasePVInverter):
     self.registers['pv2_power'] = round(self.registers['pv2_current'] * self.registers['pv2_voltage'])
     self.registers['timestamp'] = datetime(self.registers['date_year'],   self.registers['date_month'],
                                            self.registers['date_day'],    self.registers['date_hour'],
-                                           self.registers['date_minute'], self.registers['date_second']).timestamp()
+                                           self.registers['date_minute'], self.registers['date_second'])
 
   def _2x_16_to_32(self,int16_1,int16_2):
     if int16_1 < 0 and int16_2 < 0:
@@ -196,7 +196,7 @@ class PVInverter_SunGrow(BasePVInverter):
       for x in range(0, count):
         key  = str(start + x + 1)
         val  = rq.registers[x]
-
+        _logger.debug(f'{key}: {val}')
         if key in self._register_map[func]:
           reg = self._register_map[func][key]
           reg_name = reg.get('name')

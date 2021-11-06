@@ -113,7 +113,7 @@ class PVInverter_Fronius(BasePVInverter):
     print(d)
 
     self.registers = {'timestamp':     datetime.strptime(data['Head']['Timestamp'][:-6], "%Y-%m-%dT%H:%M:%S"),
-                      'daily_pv_power':Decimal(data['Body']['Data']['DAY_ENERGY']['Value']),
+                      'daily_pv_energy':Decimal(data['Body']['Data']['DAY_ENERGY']['Value']),
                       'total_pv_power':Decimal(data['Body']['Data']['PAC']['Value']),
                       #'internal_temp': Decimal(data['Body']['Data']['T_AMBIENT']['Value']).quantize(Decimal('.1')),
                       'internal_temp': Decimal(0),
