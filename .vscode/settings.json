@@ -2,5 +2,13 @@
     "python.pythonPath": "C:\\Users\\absol\\.conda\\envs\\pvstats\\python.exe",
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
-    "python.formatting.provider": "yapf",
+    "python.formatting.provider": "autopep8",
+    "python.formatting.autopep8Args": [
+        "--max-line-length",
+        "158",
+        "--experimental"
+    ],
+    "editor.rulers": [
+        79,120,158
+    ]
 }
