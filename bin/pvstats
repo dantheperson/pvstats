@@ -135,7 +135,6 @@ def main():
         except ModbusIOException as err:
             _log.debug(traceback.format_exc())
             _log.debug("Error = {}".format(err))
-            inverter.close()
             break
         except Exception as err:
             _log.debug(traceback.format_exc())
