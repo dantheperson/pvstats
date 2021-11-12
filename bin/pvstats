@@ -30,7 +30,7 @@ from astral import LocationInfo
 from astral.sun import sun, daylight
 from astral.geocoder import database, lookup
 
-from pymodbus.exceptions import ModbusIOException
+from pymodbus.exceptions import ModbusIOException, ConnectionException
 
 # Setup the logging
 logging.basicConfig(format="%(asctime)s: %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
@@ -132,7 +132,7 @@ def main():
             # Publish it
             for rpt in reports:
                 rpt.publish(inverter.registers)
-        except ModbusIOException as err:
+        except (ModbusIOException, ConnectionException) as err:
             _log.debug(traceback.format_exc())
             _log.debug("Error = {}".format(err))
             break

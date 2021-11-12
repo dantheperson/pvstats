@@ -20,7 +20,7 @@ from pymodbus.constants import Defaults
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.client.sync import ModbusSerialClient
 from pymodbus.transaction import ModbusSocketFramer
-from pymodbus.exceptions import ModbusIOException
+from pymodbus.exceptions import ModbusIOException, ConnectionException
 from pymodbus.payload import BinaryPayloadDecoder
 from SungrowModbusTcpClient import SungrowModbusTcpClient
 from datetime import datetime
@@ -152,18 +152,19 @@ class PVInverter_SunGrow(BasePVInverter):
                 if (start <= group):
                     self._load_registers(func, group, 100)
                     start = group + 100
-
+        if len(self.registers) == 0:
+            return
         # Manually calculate the power and the timestamps
-        self.registers['pv1_power'] = round(self.registers['pv1_current'] *
-                                            self.registers['pv1_voltage'])
-        self.registers['pv2_power'] = round(self.registers['pv2_current'] *
-                                            self.registers['pv2_voltage'])
-        self.registers['timestamp'] = datetime(self.registers['date_year'],
-                                               self.registers['date_month'],
-                                               self.registers['date_day'],
-                                               self.registers['date_hour'],
-                                               self.registers['date_minute'],
-                                               self.registers['date_second'])
+        self.registers['pv1_power'] = round(self.registers.get('pv1_current',0) *
+                                            self.registers.get('pv1_voltage',0))
+        self.registers['pv2_power'] = round(self.registers.get('pv2_current',0) *
+                                            self.registers.get('pv2_voltage',0))
+        self.registers['timestamp'] = datetime(self.registers.get('date_year',0),
+                                               self.registers.get('date_month',0),
+                                               self.registers.get('date_day',0),
+                                               self.registers.get('date_hour',0),
+                                               self.registers.get('date_minute',0),
+                                               self.registers.get('date_second',0))
 
     def _2x_16_to_32(self, int16_1, int16_2):
         if int16_1 < 0 and int16_2 < 0:
@@ -183,9 +184,10 @@ class PVInverter_SunGrow(BasePVInverter):
         hx32 = hx16_1 + hx16_2
         try:
             int32 = int(hx32, 16) * sign
-        except:
-            pass
-        return int32
+            return int32
+        except Exception as e:
+            raise e
+        
 
     def _load_registers(self, func, start, count=100):
         try:
@@ -194,19 +196,16 @@ class PVInverter_SunGrow(BasePVInverter):
             elif func == 'holding':
                 # Holding registers need an offset
                 start = start - 1
-                rq = self.client.read_holding_registers(start,
-                                                        count,
-                                                        unit=0x01)
+                rq = self.client.read_holding_registers(start,count,unit=0x01)
             else:
                 raise Exception("Unknown register type: {}".format(type))
 
             if isinstance(rq, ModbusIOException):
                 _logger.error("Error: {}".format(rq))
-                raise Exception("ModbusIOException")
+                raise ModbusIOException
 
-            for x in range(0, count):
+            for x, val in enumerate(rq.registers):
                 key = str(start + x + 1)
-                val = rq.registers[x]
                 _logger.debug(f'{key}: {val}')
                 if key in self._register_map[func]:
                     reg = self._register_map[func][key]
@@ -226,12 +225,16 @@ class PVInverter_SunGrow(BasePVInverter):
                         self.registers[reg_name[0:-2]] = self._2x_16_to_32(
                             reg_2, reg_1) * reg_scale
                         self.registers.pop(reg_name)
-
+        except (ModbusIOException, ConnectionException) as err:
+            _logger.error("Error: %s" % err)
+            _logger.debug("{}, start: {}, count: {}".format(
+                type, start, count))
+            raise err
         except Exception as err:
             _logger.error("Error: %s" % err)
             _logger.debug("{}, start: {}, count: {}".format(
                 type, start, count))
-            raise
+            raise err
 
 
 class PVInverter_SunGrowRTU(PVInverter_SunGrow):
