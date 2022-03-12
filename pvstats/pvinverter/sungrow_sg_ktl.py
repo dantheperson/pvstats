@@ -37,6 +37,7 @@ _logger = logging.getLogger(__name__)
 # registers found here
 # https://solarclarity.co.uk/wp-content/uploads//2018/12/TI_20180301_String-Inverters_Communication-Protocol_V10_EN.pdf
 # https://www.scribd.com/document/456644634/String-Inverters-Communication-Protocol
+# https://raw.githubusercontent.com/bohdan-s/Sungrow-Inverter/main/Modbus%20Information/Communication%20Protocol%20of%20PV%20Grid-Connected%20String%20Inverters_V1.1.37_EN.pdf
 
 _register_map = {
   'input': {
@@ -106,8 +107,8 @@ _register_map = {
     '5114':  {'name': 'tag_country',                             'scale': Decimal(1),         'units': 'UNK',    'type': 'uint16'},
     '5128':  {'name': 'monthly_energy',                          'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
     '5129':  {'name': 'monthly_energy_2',                        'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
-    '5144':  {'name': 'lifetime_energy_yeild',                   'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
-    '5145':  {'name': 'lifetime_energy_yeild_2',                 'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
+    '5144':  {'name': 'lifetime_energy_yield',                   'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
+    '5145':  {'name': 'lifetime_energy_yield_2',                 'scale': Decimal(100),       'units': 'Wh',     'type': 'uint32'},
     '5146':  {'name': 'negative_voltage_to_ground',              'scale': Decimal('0.1'),     'units': 'V',      'type': 'int16'},
     '5147':  {'name': 'bus_voltage',                             'scale': Decimal('0.1'),     'units': 'V',      'type': 'uint16'},  
     # '5148':  {'name': 'grid_frequency_fine',                     'scale': Decimal('0.01'),     'units': 'Hz',    'type': 'uint16'},  
